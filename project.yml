@@ -1,0 +1,120 @@
+name: Follow
+options:
+  bundleIdPrefix: com.local
+  deploymentTarget:
+    iOS: '17.0'
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation.git
+    from: 0.9.20
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    TARGETED_DEVICE_FAMILY: '1'
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: '1.3'
+    CURRENT_PROJECT_VERSION: '4'
+    ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+targets:
+  Follow:
+    type: application
+    platform: iOS
+    sources: [Follow]
+    dependencies:
+      - package: ZIPFoundation
+      - target: FollowShare
+    entitlements:
+      path: Follow/Follow.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.local.Follow]
+    info:
+      path: Follow/Info.plist
+      properties:
+        CFBundleDisplayName: Follow
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UIBackgroundModes: [audio]
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        LSSupportsOpeningDocumentsInPlace: true
+        UIFileSharingEnabled: true
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: EPUB Book
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes: [org.idpf.epub-container]
+  FollowShare:
+    type: app-extension
+    platform: iOS
+    sources: [ShareExtension]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.local.Follow.Share
+    entitlements:
+      path: ShareExtension/FollowShare.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.local.Follow]
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Follow
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsFileWithMaxCount: 1
+  FollowPersonal:
+    type: application
+    platform: iOS
+    sources:
+      - path: Follow
+        excludes: [Follow.entitlements]
+      - path: Resources/Sample.epub
+        buildPhase: resources
+    dependencies:
+      - package: ZIPFoundation
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.calebhines.Follow.personal
+        DEVELOPMENT_TEAM: BXK7DYHCND
+        TARGETED_DEVICE_FAMILY: '1'
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) PERSONAL_BUILD
+        INFOPLIST_FILE: Follow/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+  FollowPersonalTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [FollowTests]
+    dependencies:
+      - target: FollowPersonal
+    settings:
+      base:
+        DEVELOPMENT_TEAM: BXK7DYHCND
+        PRODUCT_BUNDLE_IDENTIFIER: com.calebhines.Follow.personal.tests
+        TARGETED_DEVICE_FAMILY: '1'
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) PERSONAL_TEST
+        GENERATE_INFOPLIST_FILE: YES
+  FollowTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [FollowTests]
+    dependencies:
+      - target: Follow
+schemes:
+  Follow:
+    build:
+      targets:
+        Follow: all
+    test:
+      targets: [FollowTests]
+  Follow iPhone:
+    build:
+      targets:
+        FollowPersonal: all
+    run:
+      config: Debug
+    test:
+      targets: [FollowPersonalTests]
