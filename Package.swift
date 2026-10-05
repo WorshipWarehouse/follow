@@ -6,7 +6,7 @@ let package = Package(
     products: [.library(name: "FollowCore", targets: ["FollowCore"])],
     dependencies: [.package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.20")],
     targets: [
-        .target(name: "FollowCore", dependencies: ["ZIPFoundation"], path: "Follow", exclude: ["FollowApp.swift", "Narrator.swift", "PaginatedReader.swift", "ReadingTools.swift", "Info.plist", "Follow.entitlements", "Assets.xcassets"], sources: ["Models.swift", "EPUBImporter.swift"]),
+        .target(name: "FollowCore", dependencies: ["ZIPFoundation"], path: "Follow", exclude: ["FollowApp.swift", "Narrator.swift", "PaginatedReader.swift", "ReadingTools.swift", "VoicePicker.swift", "BookEditor.swift", "PasteBook.swift", "Info.plist", "Follow.entitlements", "Assets.xcassets"], sources: ["Models.swift", "EPUBImporter.swift", "EPUBArchive.swift"]),
         .testTarget(name: "FollowCoreTests", dependencies: ["FollowCore"], path: "CoreTests", resources: [.copy("Sample.epub")])
     ]
 )

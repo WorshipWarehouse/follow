@@ -125,7 +125,20 @@ enum ImportFailure: LocalizedError {
 }
 enum EPUBImporter {
     static func load(_ url: URL) throws -> Book {
-        let archive = try Archive(url: url, accessMode: .read)
+        if try url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory == true {
+            let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            defer { try? FileManager.default.removeItem(at: folder) }
+            let normalized = folder.appendingPathComponent("Book.epub")
+            try EPUBArchive.copy(from: url, to: normalized)
+            return try load(normalized)
+        }
+        let archive: Archive
+        do { archive = try Archive(url: url, accessMode: .read) }
+        catch Archive.ArchiveError.missingEndOfCentralDirectoryRecord {
+            let size = (try? url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
+            throw ImportFailure.invalid("This file is incomplete or isn’t an EPUB archive (\(size.formatted()) bytes). In Files, download the book fully, then copy or select the actual .epub file again. If it still fails, send the file so we can check it.")
+        }
         var consumed = 0
         func data(_ path: String) throws -> Data {
             guard !path.hasPrefix("/"), !path.components(separatedBy: "/").contains(".."), let entry = archive[path] else { throw ImportFailure.invalid("A required EPUB resource is missing: \(path)") }

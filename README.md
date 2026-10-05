@@ -94,3 +94,35 @@ Before calling the full acceptance test passed:
 The bottom reading menu and grouping of search, bookmarks/highlights, themes, and line-guide controls were informed by [Apple’s Books reading guide](https://support.apple.com/guide/iphone/read-books-iphc1af7c57/ios).
 
 Starting narration closes the reading menu. A labeled Pause button remains beside the bottom-right menu; it becomes Resume when paused. Both directions of all page transitions use the chosen palette. Reduce Motion disables the animations.
+
+## Voice picker update (1.4)
+
+Themes & Settings → Voice now browses every voice exposed by Apple’s app speech API, with language/name search, Standard/Enhanced/Premium labels, previews, and automatic refresh after downloads. Device spoken voice leaves selection to Apple’s device preference. Siri voices such as Voice 3 are excluded from AVSpeechSynthesizer; Apple supplies a fallback if Siri is the device preference. To hear the actual Siri voice, use Apple’s accessibility reading features in the new continuous-text Apple Accessibility Reader view, accessible from the reading menu or voice picker. It starts at the Follow cursor and supplies the remaining book text to a native UITextView. Those do not provide Follow’s synchronized playback cursor.
+
+If a saved voice becomes unavailable, Follow reports it instead of silently choosing another voice. The 1.4 build and device tests must be confirmed before treating this update as installed.
+
+## Book details (1.4)
+
+Long-press a book in the library and choose Edit Book, or choose Edit Book from the reading menu. Correct title and author, choose a cover from Photos or Files, or remove it. Save writes only Follow’s library metadata; the original EPUB, reading position, bookmarks, and highlights are preserved. Reimporting the original file still finds the edited book.
+
+The signed 1.4 app builds successfully and the iPhone test target compiles. Installation and physical-device testing are pending because the connected iPhone is unavailable to Xcode.
+
+## Paste import (1.5)
+
+Copy an EPUB file in Files, open Follow, and choose + → Paste. The native system paste control accepts EPUB file representations and file URLs, stages transient provider files before importing, and leaves the clipboard alone until the user pastes. Non-EPUB files and inaccessible file URLs report an import error. EPUB imported-type declarations improve Open In discovery. The personal iPhone build still excludes the App Group based Share extension; Open In and paste are its import routes.
+
+Version 1.5 was signed, installed, and launched on Caleb’s iPhone. All 18 device tests passed, including EPUB paste staging and rejection of non-EPUB file URLs. Share-row visibility across source apps has not been verified.
+
+## Import picker repair (1.5 build 7)
+
+Restored the direct + button and moved Paste beside it. Files accepts generic items so provider EPUBs classified as ZIP/data remain selectable; the importer checks the .epub extension and parser validates contents. Import coordinates and stages a local file-provider snapshot before parsing and archive retention. Twelve core checks passed (one additional check skipped), eighteen existing device checks passed, and the added physical-device import/persistence check passed.
+
+## Apple Books package repair (1.5 build 9)
+
+The ten user-supplied Apple Books .epub URLs were unpacked directories, explaining ZIPFoundation error 13. EPUBArchive now creates a temporary standards-compliant ZIP with mimetype first and uncompressed before importing or pasting a directory package. The source remains untouched; retained originals are normalized ZIPs so reopening and parser migrations work. Symlinks and oversized packages are rejected. All ten supplied books passed local import, 14 core tests passed (one unrelated local-fixture test skipped), and all 22 iPhone tests passed, including directory import/retention and clipboard-data paste. The normal build was signed for installation.
+
+The optional Follow iPhone Sharing scheme includes a personal-team Share extension that copies the selected EPUB to the clipboard on an explicit Copy Book for Follow tap. Open Follow and Paste to complete import. This avoids App Group requirements, but its new bundle identifier still needs an Apple Account signing profile; it is not included in the installed build until signing is restored.
+
+## Sharing build (1.5 build 10)
+
+Removed Paste from the library and empty state. The Follow iPhone Sharing scheme now signs successfully and embeds FollowPersonalShare. Its Save Book for Follow action exports the normalized EPUB through the system Files picker. Save in On My iPhone → Follow and open Follow for inbox import, or save elsewhere and use +. The sharing app uses the same bundle identifier and preserves existing library data. The signed app and embedded extension passed codesign verification. Share-sheet visibility and the Files export interaction still need a manual check on the phone.

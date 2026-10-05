@@ -1,8 +1,10 @@
 import UIKit
 import UniformTypeIdentifiers
 
-final class ShareViewController: UIViewController {
+final class ShareViewController: UIViewController, UIDocumentPickerDelegate {
     private let status = UILabel()
+    private var pendingBook: URL?
+    private let saveButton = UIButton(type: .system)
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -14,7 +16,10 @@ final class ShareViewController: UIViewController {
         done.setTitle("Done", for: .normal)
         done.titleLabel?.font = .preferredFont(forTextStyle: .headline)
         done.addTarget(self, action: #selector(finish), for: .touchUpInside)
-        let stack = UIStackView(arrangedSubviews: [status, done])
+        saveButton.setTitle("Save Book for Follow", for: .normal)
+        saveButton.addTarget(self, action: #selector(saveBook), for: .touchUpInside)
+        saveButton.isHidden = true
+        let stack = UIStackView(arrangedSubviews: [status, saveButton, done])
         stack.axis = .vertical
         stack.spacing = 24
         stack.translatesAutoresizingMaskIntoConstraints = false
@@ -33,7 +38,7 @@ final class ShareViewController: UIViewController {
         }
         let type = provider.hasItemConformingToTypeIdentifier(epub) ? epub : UTType.fileURL.identifier
         provider.loadFileRepresentation(forTypeIdentifier: type) { [weak self] url, error in
-            if let url { self?.store(url) }
+            if let url { self?.store(url, knownEPUB: type == epub) }
             else {
                 provider.loadItem(forTypeIdentifier: UTType.fileURL.identifier, options: nil) { [weak self] item, error in
                     guard let url = item as? URL else { self?.show(error?.localizedDescription ?? "This file could not be opened."); return }
@@ -42,11 +47,24 @@ final class ShareViewController: UIViewController {
             }
         }
     }
-    private func store(_ url: URL) {
-        guard url.pathExtension.lowercased() == "epub" else { show("Follow opens DRM-free EPUB files."); return }
+    private func store(_ url: URL, knownEPUB: Bool = false) {
+        guard knownEPUB || url.pathExtension.lowercased() == "epub" else { show("Follow opens DRM-free EPUB files."); return }
         let access = url.startAccessingSecurityScopedResource()
         defer { if access { url.stopAccessingSecurityScopedResource() } }
         do {
+            #if PERSONAL_SHARE
+            let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+            try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+            let normalized = folder.appendingPathComponent(url.deletingPathExtension().lastPathComponent + ".epub")
+            try EPUBArchive.copy(from: url, to: normalized)
+            let data = try Data(contentsOf: normalized)
+            guard data.starts(with: [0x50, 0x4b]) else { throw CocoaError(.fileReadCorruptFile) }
+            DispatchQueue.main.async { [weak self] in
+                self?.pendingBook = normalized
+                self?.status.text = "Save to On My iPhone → Follow, then open Follow. Or save elsewhere and add it with +."
+                self?.saveButton.isHidden = false
+            }
+            #else
             guard let group = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.local.Follow") else { throw CocoaError(.fileWriteNoPermission) }
             let inbox = group.appendingPathComponent("Inbox", isDirectory: true)
             try FileManager.default.createDirectory(at: inbox, withIntermediateDirectories: true)
@@ -55,8 +73,22 @@ final class ShareViewController: UIViewController {
             try FileManager.default.copyItem(at: url, to: staging)
             try FileManager.default.moveItem(at: staging, to: destination)
             show("Saved to Follow.\nOpen the app to start reading.")
+            #endif
         } catch { show("The book could not be saved: \(error.localizedDescription)") }
     }
     private func show(_ message: String) { DispatchQueue.main.async { [weak self] in self?.status.text = message } }
-    @objc private func finish() { extensionContext?.completeRequest(returningItems: nil) }
+    @objc private func saveBook() {
+        guard let pendingBook else { return }
+        let picker = UIDocumentPickerViewController(forExporting: [pendingBook], asCopy: true)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        status.text = "Book saved. Open Follow. If you saved outside its folder, tap + and choose the book."
+        saveButton.isHidden = true
+    }
+    @objc private func finish() {
+        if let pendingBook { try? FileManager.default.removeItem(at: pendingBook.deletingLastPathComponent()) }
+        extensionContext?.completeRequest(returningItems: nil)
+    }
 }

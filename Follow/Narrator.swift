@@ -55,6 +55,15 @@ import MediaPlayer
         highlight = nil; wordHighlight = nil
         nowPlaying()
     }
+    func refreshMetadata(_ updated: Book) {
+        guard book?.id == updated.id else { return }
+        book = updated
+        artwork = nil
+        if let data = updated.cover, let image = UIImage(data: data) {
+            artwork = MPMediaItemArtwork(boundsSize: image.size) { _ in image }
+        }
+        nowPlaying()
+    }
     func seek(_ newLocation: Location) {
         guard let book else { return }
         let wasPlaying = playing
@@ -135,7 +144,18 @@ import MediaPlayer
         }
         let next = AVSpeechUtterance(string: text)
         let settings = library?.settings ?? ReaderSettings()
-        next.voice = AVSpeechSynthesisVoice(identifier: settings.voice) ?? AVSpeechSynthesisVoice(language: book.language)
+        if settings.voice == "system" {
+            next.voice = nil // Apple applies the device preference and any required Siri fallback.
+        } else if settings.voice.isEmpty {
+            next.voice = AVSpeechSynthesisVoice(language: book.language)
+        } else {
+            guard let voice = AVSpeechSynthesisVoice(identifier: settings.voice) else {
+                playing = false; highlight = nil; wordHighlight = nil
+                error = "The selected voice is no longer available. Open Themes & Settings → Voice and choose another voice."
+                persist(); nowPlaying(); return
+            }
+            next.voice = voice
+        }
         // Apple's rate is bounded and nonlinear; multipliers are approximate.
         next.rate = min(AVSpeechUtteranceMaximumSpeechRate, max(AVSpeechUtteranceMinimumSpeechRate, AVSpeechUtteranceDefaultSpeechRate + Float(log2(settings.speed)) * 0.12))
         utterance = next

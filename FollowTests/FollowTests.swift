@@ -1,5 +1,8 @@
 import XCTest
 import UIKit
+import AVFoundation
+import UniformTypeIdentifiers
+import ZIPFoundation
 #if PERSONAL_TEST
 @testable import FollowPersonal
 #else
@@ -7,6 +10,80 @@ import UIKit
 #endif
 
 final class FollowTests: XCTestCase {
+    func testPastedEPUBIsCopiedBeforeProviderFileExpires() async throws {
+        let source = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "Sample", withExtension: "epub"))
+        let provider = NSItemProvider()
+        let type = "org.idpf.epub-container"
+        provider.registerFileRepresentation(forTypeIdentifier: type, fileOptions: [], visibility: .all) { completion in
+            completion(source, false, nil)
+            return nil
+        }
+        let staged = try await PasteBookButton.stage(provider, epub: type)
+        defer { try? FileManager.default.removeItem(at: staged.deletingLastPathComponent()) }
+        XCTAssertNotEqual(staged, source)
+        XCTAssertEqual(try EPUBImporter.load(staged).title, "The Quiet Hour")
+    }
+    func testPastedFileURLRejectsNonEPUB() async {
+        let provider = NSItemProvider(item: URL(fileURLWithPath: "/tmp/not-a-book.pdf") as NSURL, typeIdentifier: UTType.fileURL.identifier)
+        do {
+            _ = try await PasteBookButton.stage(provider, epub: "org.idpf.epub-container")
+            XCTFail("Non-EPUB clipboard files must be rejected")
+        } catch {}
+    }
+    @MainActor func testFileImportStagesAndPersistsEPUB() async throws {
+        let source = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "Sample", withExtension: "epub"))
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let library = Library(directory: folder)
+        let imported = await library.importBook(source)
+        let id = try XCTUnwrap(imported, library.error ?? "Import failed")
+        XCTAssertEqual(library.books.first?.title, "The Quiet Hour")
+        XCTAssertEqual(Library(directory: folder).books.first?.id, id)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: folder.appendingPathComponent(id.uuidString + ".epub").path))
+        let duplicate = await library.importBook(source)
+        XCTAssertEqual(duplicate, id)
+        XCTAssertEqual(library.books.count, 1)
+    }
+    func testPastedRawEPUBDataImports() async throws {
+        let source = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "Sample", withExtension: "epub"))
+        let bytes = try Data(contentsOf: source)
+        let provider = NSItemProvider()
+        provider.registerDataRepresentation(forTypeIdentifier: "org.idpf.epub-container", visibility: .all) { completion in
+            completion(bytes, nil)
+            return nil
+        }
+        let staged = try await PasteBookButton.stage(provider, epub: "org.idpf.epub-container")
+        defer { try? FileManager.default.removeItem(at: staged.deletingLastPathComponent()) }
+        XCTAssertEqual(try EPUBImporter.load(staged).title, "The Quiet Hour")
+    }
+    func testIncompleteArchiveExplainsHowToRecover() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".epub")
+        defer { try? FileManager.default.removeItem(at: url) }
+        try Data("Not a ZIP archive".utf8).write(to: url)
+        XCTAssertThrowsError(try EPUBImporter.load(url)) { error in
+            XCTAssertTrue(error.localizedDescription.contains("incomplete"))
+            XCTAssertFalse(error.localizedDescription.contains("error 13"))
+        }
+    }
+    @MainActor func testAppleBooksDirectoryImportOnPhone() async throws {
+        let source = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "Sample", withExtension: "epub"))
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let package = folder.appendingPathComponent("Apple Books.epub")
+        try FileManager.default.createDirectory(at: package, withIntermediateDirectories: true)
+        try FileManager.default.unzipItem(at: source, to: package)
+        let library = Library(directory: folder.appendingPathComponent("Library"))
+        let imported = await library.importBook(package)
+        let id = try XCTUnwrap(imported, library.error ?? "Import failed")
+        XCTAssertEqual(library.books.first?.title, "The Quiet Hour")
+        let retained = folder.appendingPathComponent("Library").appendingPathComponent(id.uuidString + ".epub")
+        XCTAssertEqual(try EPUBImporter.load(retained).title, "The Quiet Hour")
+        let provider = NSItemProvider(item: package as NSURL, typeIdentifier: UTType.fileURL.identifier)
+        let pasted = try await PasteBookButton.stage(provider, epub: "org.idpf.epub-container")
+        defer { try? FileManager.default.removeItem(at: pasted.deletingLastPathComponent()) }
+        XCTAssertEqual(try EPUBImporter.load(pasted).title, "The Quiet Hour")
+    }
     private func sample() throws -> Book {
         let url = try XCTUnwrap(Bundle(for: Self.self).url(forResource: "Sample", withExtension: "epub"))
         return try EPUBImporter.load(url)
@@ -232,5 +309,44 @@ extension FollowTests {
         XCTAssertTrue(font.fontDescriptor.symbolicTraits.contains(.traitBold))
         let style = try XCTUnwrap(layout.text.attribute(.paragraphStyle, at: 100, effectiveRange: nil) as? NSParagraphStyle)
         XCTAssertEqual(style.paragraphSpacing, 24)
+    }
+}
+
+extension FollowTests {
+    @MainActor func testVoiceCatalogIncludesEveryVoiceExposedByDevice() {
+        let catalog = VoiceCatalog()
+        let exposed = AVSpeechSynthesisVoice.speechVoices()
+        XCTAssertFalse(exposed.isEmpty)
+        XCTAssertEqual(Set(catalog.matching(query: "", language: "all").map(\.identifier)), Set(exposed.map(\.identifier)))
+        let english = exposed.filter { $0.language.hasPrefix("en-") || $0.language == "en" }
+        XCTAssertEqual(Set(catalog.matching(query: "", language: "en").map(\.identifier)), Set(english.map(\.identifier)))
+        for voice in catalog.voices {
+            XCTAssertFalse(VoiceCatalog.qualityName(voice).isEmpty)
+            XCTAssertTrue(catalog.matching(query: voice.name, language: "all").contains { $0.identifier == voice.identifier })
+        }
+        print("Device voice inventory: \(exposed.count) app-accessible voices; \(english.count) English voices; \(english.filter { $0.name.localizedCaseInsensitiveContains("siri") }.count) English voices named Siri.")
+    }
+    @MainActor func testUnavailableVoiceReportsErrorInsteadOfChangingVoice() throws {
+        let book = try sample()
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let library = Library(directory: directory)
+        library.settings.voice = "com.follow.test.unavailable.voice"
+        let narrator = Narrator(); narrator.open(book, library: library); narrator.play()
+        XCTAssertFalse(narrator.playing)
+        XCTAssertTrue(narrator.error?.contains("selected voice is no longer available") == true)
+        XCTAssertEqual(library.settings.voice, "com.follow.test.unavailable.voice")
+    }
+}
+
+extension FollowTests {
+    @MainActor func testAccessibilityReaderStartsAtCursorAndKeepsRemainingChapters() throws {
+        var book = try sample()
+        book.chapters = [Chapter(id: "a", title: "One", text: "Before 🐦 after.", anchors: [:]), Chapter(id: "b", title: "Two", text: "Next chapter.", anchors: [:])]
+        let bird = (book.chapters[0].text as NSString).range(of: "🐦").location
+        let text = AccessibilityReadingView.remainingText(book: book, location: Location(chapter: 0, offset: bird + 1))
+        XCTAssertEqual(text, "🐦 after.\n\nNext chapter.")
+        XCTAssertFalse(text.contains("Before"))
+        XCTAssertEqual(AccessibilityReadingView.remainingText(book: book, location: Location(chapter: 1, offset: 9999)), "")
     }
 }

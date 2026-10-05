@@ -75,6 +75,9 @@ struct Book: Codable, Identifiable {
     var contents: [ContentsEntry]
     var location = Location()
     var parserVersion: Int? = nil
+    var originalTitle: String? = nil
+    var originalAuthor: String? = nil
+    var customCover: Bool? = nil
     var progress: Double {
         let total = chapters.reduce(0) { $0 + $1.length }
         guard total > 0 else { return 0 }
@@ -238,6 +241,9 @@ enum BookSearch {
                     let old = books[i]
                     var fresh = try EPUBImporter.load(original)
                     fresh.id = old.id
+                    if let title = old.originalTitle { fresh.originalTitle = title; fresh.title = old.title }
+                    if let author = old.originalAuthor { fresh.originalAuthor = author; fresh.author = old.author }
+                    if old.customCover == true { fresh.cover = old.cover; fresh.customCover = true }
                     fresh.location = PositionMigration.restore(old: old, new: fresh)
                     books[i] = fresh
                     upgraded = true
@@ -256,6 +262,22 @@ enum BookSearch {
             try JSONEncoder().encode(books).write(to: directory.appendingPathComponent("library.json"), options: .atomic)
             UserDefaults.standard.set(try JSONEncoder().encode(settings), forKey: "readerSettings")
         } catch { self.error = "Your reading position could not be saved: \(error.localizedDescription)" }
+    }
+    func editBook(_ id: UUID, title: String, author: String, cover: Data?) throws -> Book {
+        let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !title.isEmpty, let index = books.firstIndex(where: { $0.id == id }) else {
+            throw NSError(domain: "Follow.BookEditor", code: 1, userInfo: [NSLocalizedDescriptionKey: "Enter a title and make sure the book is still in your library."])
+        }
+        var updated = books
+        updated[index].originalTitle = updated[index].originalTitle ?? updated[index].title
+        updated[index].originalAuthor = updated[index].originalAuthor ?? updated[index].author
+        updated[index].title = title
+        updated[index].author = author.trimmingCharacters(in: .whitespacesAndNewlines)
+        if updated[index].cover != cover { updated[index].customCover = true }
+        updated[index].cover = cover
+        try JSONEncoder().encode(updated).write(to: directory.appendingPathComponent("library.json"), options: .atomic)
+        books = updated
+        return updated[index]
     }
     func update(_ id: UUID, location: Location) {
         guard let i = books.firstIndex(where: { $0.id == id }) else { return }
@@ -319,9 +341,31 @@ enum BookSearch {
         let access = url.startAccessingSecurityScopedResource()
         defer { if access { url.stopAccessingSecurityScopedResource() } }
         do {
-            let book = try await Task.detached(priority: .userInitiated) { try EPUBImporter.load(url) }.value
-            if let existing = books.first(where: { $0.title == book.title && $0.author == book.author && $0.chapters.map(\.id) == book.chapters.map(\.id) }) { return existing.id }
-            try FileManager.default.copyItem(at: url, to: directory.appendingPathComponent(book.id.uuidString + ".epub"))
+            guard url.pathExtension.lowercased() == "epub" else {
+                throw NSError(domain: "Follow.Import", code: 1, userInfo: [NSLocalizedDescriptionKey: "Choose an EPUB book (.epub). This file is not an EPUB."])
+            }
+            // File providers can classify EPUBs as ZIP or generic data. Coordinate a
+            // local snapshot so iCloud/provider downloads finish before ZIP parsing.
+            let snapshot = try await Task.detached(priority: .userInitiated) { () throws -> URL in
+                let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+                try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+                let destination = folder.appendingPathComponent("Import.epub")
+                var coordinationError: NSError?
+                var copyError: Error?
+                NSFileCoordinator().coordinate(readingItemAt: url, options: [], error: &coordinationError) { readable in
+                    do { try EPUBArchive.copy(from: readable, to: destination) }
+                    catch { copyError = error }
+                }
+                if let error = coordinationError ?? copyError as NSError? {
+                    try? FileManager.default.removeItem(at: folder)
+                    throw error
+                }
+                return destination
+            }.value
+            defer { try? FileManager.default.removeItem(at: snapshot.deletingLastPathComponent()) }
+            let book = try await Task.detached(priority: .userInitiated) { try EPUBImporter.load(snapshot) }.value
+            if let existing = books.first(where: { ($0.originalTitle ?? $0.title) == book.title && ($0.originalAuthor ?? $0.author) == book.author && $0.chapters.map(\.id) == book.chapters.map(\.id) }) { return existing.id }
+            try FileManager.default.copyItem(at: snapshot, to: directory.appendingPathComponent(book.id.uuidString + ".epub"))
             books.append(book)
             save()
             return book.id

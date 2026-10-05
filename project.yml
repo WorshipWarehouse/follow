@@ -12,8 +12,8 @@ settings:
     SWIFT_VERSION: '5.0'
     TARGETED_DEVICE_FAMILY: '1'
     CODE_SIGN_STYLE: Automatic
-    MARKETING_VERSION: '1.3'
-    CURRENT_PROJECT_VERSION: '4'
+    MARKETING_VERSION: '1.5'
+    CURRENT_PROJECT_VERSION: '10'
     ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 targets:
   Follow:
@@ -38,6 +38,13 @@ targets:
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         LSSupportsOpeningDocumentsInPlace: true
         UIFileSharingEnabled: true
+        UTImportedTypeDeclarations:
+          - UTTypeIdentifier: org.idpf.epub-container
+            UTTypeDescription: EPUB Book
+            UTTypeConformsTo: [public.data, public.content, public.archive]
+            UTTypeTagSpecification:
+              public.filename-extension: [epub]
+              public.mime-type: [application/epub+zip]
         CFBundleDocumentTypes:
           - CFBundleTypeName: EPUB Book
             CFBundleTypeRole: Viewer
@@ -46,7 +53,9 @@ targets:
   FollowShare:
     type: app-extension
     platform: iOS
-    sources: [ShareExtension]
+    sources:
+      - path: ShareExtension
+        excludes: [PersonalInfo.plist]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.local.Follow.Share
@@ -84,6 +93,51 @@ targets:
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) PERSONAL_BUILD
         INFOPLIST_FILE: Follow/Info.plist
         GENERATE_INFOPLIST_FILE: NO
+  FollowPersonalSharing:
+    type: application
+    platform: iOS
+    sources:
+      - path: Follow
+        excludes: [Follow.entitlements]
+      - path: Resources/Sample.epub
+        buildPhase: resources
+    dependencies:
+      - package: ZIPFoundation
+      - target: FollowPersonalShare
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.calebhines.Follow.personal
+        DEVELOPMENT_TEAM: BXK7DYHCND
+        TARGETED_DEVICE_FAMILY: '1'
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) PERSONAL_BUILD
+        INFOPLIST_FILE: Follow/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+  FollowPersonalShare:
+    type: app-extension
+    platform: iOS
+    dependencies:
+      - package: ZIPFoundation
+    sources:
+      - path: Follow/EPUBArchive.swift
+      - path: ShareExtension
+        excludes: [FollowShare.entitlements, Info.plist, PersonalInfo.plist]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.calebhines.Follow.personal.share
+        DEVELOPMENT_TEAM: BXK7DYHCND
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) PERSONAL_SHARE
+    info:
+      path: ShareExtension/PersonalInfo.plist
+      properties:
+        CFBundleDisplayName: Follow
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            NSExtensionActivationRule:
+              NSExtensionActivationSupportsFileWithMaxCount: 1
   FollowPersonalTests:
     type: bundle.unit-test
     platform: iOS
@@ -118,3 +172,9 @@ schemes:
       config: Debug
     test:
       targets: [FollowPersonalTests]
+  Follow iPhone Sharing:
+    build:
+      targets:
+        FollowPersonalSharing: all
+    run:
+      config: Debug

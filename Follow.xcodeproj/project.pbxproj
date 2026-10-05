@@ -8,28 +8,53 @@
 
 /* Begin PBXBuildFile section */
 		01F1A5EFB4234DF7F9FC4275 /* Narrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AFE5BAAD0AFAFE899148FA /* Narrator.swift */; };
+		0A28B289F0FACEBAF30C58C9 /* BookEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEC529684555C5D757D2D3E /* BookEditor.swift */; };
+		0C948816094670EFB4CAA640 /* EPUBImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02C87811578FFEA64A10A42 /* EPUBImporter.swift */; };
 		0D2C2C16780FDF39748C4A92 /* EPUBImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02C87811578FFEA64A10A42 /* EPUBImporter.swift */; };
 		0E52429C474380D1909CBA80 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C77B5CD0BC59DF7EF992A6 /* Models.swift */; };
 		0ED377C2D3AD4CFB2170BF06 /* PaginatedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6800FE3A1B4A1D3FF7E4DC /* PaginatedReader.swift */; };
+		0EE570D26F1C98538B501EC0 /* VoicePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7C8296F2D7C37B96463FF6 /* VoicePicker.swift */; };
+		17308BCE41A73381EC12013F /* ReadingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BAD6B8F3636D8ECB9C40E7 /* ReadingTools.swift */; };
+		1D47CD94B87DA046B6179F47 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C77B5CD0BC59DF7EF992A6 /* Models.swift */; };
+		22D2556E475D59A1F710D45B /* BookEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEC529684555C5D757D2D3E /* BookEditor.swift */; };
+		22D9980BB294AB0D40B9B7DD /* EPUBArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E72F42C970CD7ED90CDE774 /* EPUBArchive.swift */; };
+		22E5FEBCD41706A94AC2D12B /* FollowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDAC3279F1DB3966597FD7 /* FollowApp.swift */; };
+		2E246B38C0FF7CF06B2DCF66 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 9533C44CE8BEC4E55247C10A /* ZIPFoundation */; };
 		310593A676BC53CBAB84B4B6 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 7ADC971674FF75B5C4041647 /* ZIPFoundation */; };
 		31B85DF0D6A25ACEA991F517 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = 6ACDDB83EDCAD6CB46320AF1 /* ZIPFoundation */; };
+		3A175D53F906090E6A3CE873 /* PasteBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C61F14DB6910C59D0FC7885 /* PasteBook.swift */; };
+		3A237ECFBDE2D56782401940 /* VoicePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7C8296F2D7C37B96463FF6 /* VoicePicker.swift */; };
+		3A63C747EDFC4383A1D2D425 /* PasteBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C61F14DB6910C59D0FC7885 /* PasteBook.swift */; };
+		3B3C460494617ECD82FD09C8 /* PaginatedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6800FE3A1B4A1D3FF7E4DC /* PaginatedReader.swift */; };
 		480E8847964D3FF748F052CF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6408282729235635636C7283 /* Assets.xcassets */; };
 		495041727D04EF3E48ABCAB8 /* Sample.epub in Resources */ = {isa = PBXBuildFile; fileRef = 32941FA863367C050DE7B60C /* Sample.epub */; };
+		4CB8668E5D2885E514972677 /* PasteBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C61F14DB6910C59D0FC7885 /* PasteBook.swift */; };
+		5564AB35CF7E97D696B8BE61 /* EPUBArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E72F42C970CD7ED90CDE774 /* EPUBArchive.swift */; };
 		5AA4B4489BCAA3C71860053A /* Narrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AFE5BAAD0AFAFE899148FA /* Narrator.swift */; };
 		600D0210DD9640CAA46697C0 /* FollowShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E08111E8AC9D98E7BB2E9373 /* FollowShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		671FC2A43449C38E6684B0AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6408282729235635636C7283 /* Assets.xcassets */; };
 		6A4C55F629550BBE36B72172 /* FollowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DB7904CFDE6ACFB5577FA0 /* FollowTests.swift */; };
+		6B97E00079C6ED0034382B25 /* VoicePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7C8296F2D7C37B96463FF6 /* VoicePicker.swift */; };
 		6F97F4165FC509D968B04E7D /* EPUBImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02C87811578FFEA64A10A42 /* EPUBImporter.swift */; };
+		776CD91549FC81547E025BF8 /* EPUBArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E72F42C970CD7ED90CDE774 /* EPUBArchive.swift */; };
+		7CCA7B83FF11748669E19324 /* Narrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AFE5BAAD0AFAFE899148FA /* Narrator.swift */; };
 		9016B514EC68E65206B9FF6C /* Sample.epub in Resources */ = {isa = PBXBuildFile; fileRef = 32941FA863367C050DE7B60C /* Sample.epub */; };
+		919D76E87C205A0A04B2B9FC /* BookEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEC529684555C5D757D2D3E /* BookEditor.swift */; };
+		97864B629392C13E95049885 /* FollowPersonalShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 0995ABD2C54C4B863D052530 /* FollowPersonalShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		9E98939E8E44158C27ED1A8C /* FollowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDAC3279F1DB3966597FD7 /* FollowApp.swift */; };
 		AFBE5B3544DC73F9417E080B /* PaginatedReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C6800FE3A1B4A1D3FF7E4DC /* PaginatedReader.swift */; };
+		B5EF90D985AA951B5BAB1D64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6408282729235635636C7283 /* Assets.xcassets */; };
 		B776C207C9477BDC30A05B95 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C77B5CD0BC59DF7EF992A6 /* Models.swift */; };
 		C273C51D2AB469A39A38B127 /* FollowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DB7904CFDE6ACFB5577FA0 /* FollowTests.swift */; };
+		C79AAACC702DB1DE007152DC /* Sample.epub in Resources */ = {isa = PBXBuildFile; fileRef = D92D7B8ECFAEE48D5E323BD7 /* Sample.epub */; };
 		CFFC59325DDAD4BBFB60A463 /* FollowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BBDAC3279F1DB3966597FD7 /* FollowApp.swift */; };
 		D00877A34890ECD706388835 /* ReadingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BAD6B8F3636D8ECB9C40E7 /* ReadingTools.swift */; };
 		D1B8E009F8FB5062372C4936 /* ReadingTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BAD6B8F3636D8ECB9C40E7 /* ReadingTools.swift */; };
 		D292C9D269CD7052318B7F85 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5103DB2292343A7FD9177BD /* ShareViewController.swift */; };
+		DA2530B54ACA74D10A9270FD /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5103DB2292343A7FD9177BD /* ShareViewController.swift */; };
+		E711398D2D4F9A922D37AD5D /* EPUBArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E72F42C970CD7ED90CDE774 /* EPUBArchive.swift */; };
 		E7FDE552B70BDB8DA926832C /* Sample.epub in Resources */ = {isa = PBXBuildFile; fileRef = D92D7B8ECFAEE48D5E323BD7 /* Sample.epub */; };
+		EB0CFC7A5EC40E7D41C6B827 /* ZIPFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = BA7AC3A02F34322E5EC56E7B /* ZIPFoundation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,9 +79,27 @@
 			remoteGlobalIDString = 6FC7A7E40064BC192713125C;
 			remoteInfo = Follow;
 		};
+		FF97E97989A704DE528ED172 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 87D00FECA02EBE8D2CFBE0E9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 31218F307AA5555E2E670E84;
+			remoteInfo = FollowPersonalShare;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		04168F1DF2EC4995FBDF139D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				97864B629392C13E95049885 /* FollowPersonalShare.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		1FC0A04C3BAD4D4024607E42 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,7 +115,10 @@
 
 /* Begin PBXFileReference section */
 		08AFE5BAAD0AFAFE899148FA /* Narrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Narrator.swift; sourceTree = "<group>"; };
+		0995ABD2C54C4B863D052530 /* FollowPersonalShare.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FollowPersonalShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C61F14DB6910C59D0FC7885 /* PasteBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteBook.swift; sourceTree = "<group>"; };
 		25539379F1A625368AE0FE33 /* FollowPersonal.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FollowPersonal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		25BE089B54E7AC0A40D681F6 /* FollowPersonalSharing.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FollowPersonalSharing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C3A64D5733E4D44F73C8D81 /* FollowPersonalTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FollowPersonalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		32941FA863367C050DE7B60C /* Sample.epub */ = {isa = PBXFileReference; path = Sample.epub; sourceTree = "<group>"; };
 		433EC292BEAD4C7EED8A2C75 /* Follow.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Follow.entitlements; sourceTree = "<group>"; };
@@ -81,6 +127,7 @@
 		5C6800FE3A1B4A1D3FF7E4DC /* PaginatedReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaginatedReader.swift; sourceTree = "<group>"; };
 		6408282729235635636C7283 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65DB7904CFDE6ACFB5577FA0 /* FollowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowTests.swift; sourceTree = "<group>"; };
+		7E72F42C970CD7ED90CDE774 /* EPUBArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPUBArchive.swift; sourceTree = "<group>"; };
 		8567E0FD89E7B9D76FF13DBC /* FollowTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FollowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BBDAC3279F1DB3966597FD7 /* FollowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowApp.swift; sourceTree = "<group>"; };
 		A8C77B5CD0BC59DF7EF992A6 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -88,9 +135,11 @@
 		D92D7B8ECFAEE48D5E323BD7 /* Sample.epub */ = {isa = PBXFileReference; path = Sample.epub; sourceTree = "<group>"; };
 		E08111E8AC9D98E7BB2E9373 /* FollowShare.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FollowShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E85F6FA352AFDF6E42904996 /* Follow.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Follow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF7C8296F2D7C37B96463FF6 /* VoicePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePicker.swift; sourceTree = "<group>"; };
 		F5103DB2292343A7FD9177BD /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		F8BAD6B8F3636D8ECB9C40E7 /* ReadingTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingTools.swift; sourceTree = "<group>"; };
 		FC3DBFD57D0BC1DD264E459B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FDEC529684555C5D757D2D3E /* BookEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEditor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +159,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DF736A0AFEE8B780A1853E86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB0CFC7A5EC40E7D41C6B827 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E30ED06B2E9A05E4A7E1CF41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E246B38C0FF7CF06B2DCF66 /* ZIPFoundation in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -118,6 +183,8 @@
 			children = (
 				E85F6FA352AFDF6E42904996 /* Follow.app */,
 				25539379F1A625368AE0FE33 /* FollowPersonal.app */,
+				0995ABD2C54C4B863D052530 /* FollowPersonalShare.appex */,
+				25BE089B54E7AC0A40D681F6 /* FollowPersonalSharing.app */,
 				2C3A64D5733E4D44F73C8D81 /* FollowPersonalTests.xctest */,
 				E08111E8AC9D98E7BB2E9373 /* FollowShare.appex */,
 				8567E0FD89E7B9D76FF13DBC /* FollowTests.xctest */,
@@ -138,6 +205,8 @@
 			isa = PBXGroup;
 			children = (
 				6408282729235635636C7283 /* Assets.xcassets */,
+				FDEC529684555C5D757D2D3E /* BookEditor.swift */,
+				7E72F42C970CD7ED90CDE774 /* EPUBArchive.swift */,
 				B02C87811578FFEA64A10A42 /* EPUBImporter.swift */,
 				433EC292BEAD4C7EED8A2C75 /* Follow.entitlements */,
 				8BBDAC3279F1DB3966597FD7 /* FollowApp.swift */,
@@ -145,7 +214,9 @@
 				A8C77B5CD0BC59DF7EF992A6 /* Models.swift */,
 				08AFE5BAAD0AFAFE899148FA /* Narrator.swift */,
 				5C6800FE3A1B4A1D3FF7E4DC /* PaginatedReader.swift */,
+				0C61F14DB6910C59D0FC7885 /* PasteBook.swift */,
 				F8BAD6B8F3636D8ECB9C40E7 /* ReadingTools.swift */,
+				EF7C8296F2D7C37B96463FF6 /* VoicePicker.swift */,
 			);
 			path = Follow;
 			sourceTree = "<group>";
@@ -190,6 +261,25 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		31218F307AA5555E2E670E84 /* FollowPersonalShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B81D2E1180EFB49A58893207 /* Build configuration list for PBXNativeTarget "FollowPersonalShare" */;
+			buildPhases = (
+				EDFF602F1920C4C336E784F2 /* Sources */,
+				E30ED06B2E9A05E4A7E1CF41 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FollowPersonalShare;
+			packageProductDependencies = (
+				9533C44CE8BEC4E55247C10A /* ZIPFoundation */,
+			);
+			productName = FollowPersonalShare;
+			productReference = 0995ABD2C54C4B863D052530 /* FollowPersonalShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		351DC7256FD042E4CA98D4BA /* FollowPersonalTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 642CF3A7742CE36C9E764BE4 /* Build configuration list for PBXNativeTarget "FollowPersonalTests" */;
@@ -229,6 +319,28 @@
 			);
 			productName = Follow;
 			productReference = E85F6FA352AFDF6E42904996 /* Follow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8E504D24F63AA070047D171E /* FollowPersonalSharing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 74395429DF3652C3E697E611 /* Build configuration list for PBXNativeTarget "FollowPersonalSharing" */;
+			buildPhases = (
+				56F55EF4B0F71CFC7910748D /* Sources */,
+				7128268CFD92F726D2C89983 /* Resources */,
+				DF736A0AFEE8B780A1853E86 /* Frameworks */,
+				04168F1DF2EC4995FBDF139D /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				483162E487EA609BB9847CDD /* PBXTargetDependency */,
+			);
+			name = FollowPersonalSharing;
+			packageProductDependencies = (
+				BA7AC3A02F34322E5EC56E7B /* ZIPFoundation */,
+			);
+			productName = FollowPersonalSharing;
+			productReference = 25BE089B54E7AC0A40D681F6 /* FollowPersonalSharing.app */;
 			productType = "com.apple.product-type.application";
 		};
 		CFE73BE844E639175688F278 /* FollowShare */ = {
@@ -296,11 +408,19 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					31218F307AA5555E2E670E84 = {
+						DevelopmentTeam = BXK7DYHCND;
+						ProvisioningStyle = Automatic;
+					};
 					351DC7256FD042E4CA98D4BA = {
 						DevelopmentTeam = BXK7DYHCND;
 						ProvisioningStyle = Automatic;
 					};
 					6FC7A7E40064BC192713125C = {
+						ProvisioningStyle = Automatic;
+					};
+					8E504D24F63AA070047D171E = {
+						DevelopmentTeam = BXK7DYHCND;
 						ProvisioningStyle = Automatic;
 					};
 					CFE73BE844E639175688F278 = {
@@ -335,6 +455,8 @@
 				6FC7A7E40064BC192713125C /* Follow */,
 				CFE73BE844E639175688F278 /* FollowShare */,
 				EF97DB3C2A77C03B4FF456FB /* FollowPersonal */,
+				8E504D24F63AA070047D171E /* FollowPersonalSharing */,
+				31218F307AA5555E2E670E84 /* FollowPersonalShare */,
 				351DC7256FD042E4CA98D4BA /* FollowPersonalTests */,
 				F5EFAE52677C67A4AC60F254 /* FollowTests */,
 			);
@@ -375,9 +497,35 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7128268CFD92F726D2C89983 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5EF90D985AA951B5BAB1D64 /* Assets.xcassets in Resources */,
+				C79AAACC702DB1DE007152DC /* Sample.epub in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		56F55EF4B0F71CFC7910748D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A28B289F0FACEBAF30C58C9 /* BookEditor.swift in Sources */,
+				E711398D2D4F9A922D37AD5D /* EPUBArchive.swift in Sources */,
+				0C948816094670EFB4CAA640 /* EPUBImporter.swift in Sources */,
+				22E5FEBCD41706A94AC2D12B /* FollowApp.swift in Sources */,
+				1D47CD94B87DA046B6179F47 /* Models.swift in Sources */,
+				7CCA7B83FF11748669E19324 /* Narrator.swift in Sources */,
+				3B3C460494617ECD82FD09C8 /* PaginatedReader.swift in Sources */,
+				3A63C747EDFC4383A1D2D425 /* PasteBook.swift in Sources */,
+				17308BCE41A73381EC12013F /* ReadingTools.swift in Sources */,
+				3A237ECFBDE2D56782401940 /* VoicePicker.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		97664DD71E35DB8B367421EB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -398,12 +546,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				22D2556E475D59A1F710D45B /* BookEditor.swift in Sources */,
+				22D9980BB294AB0D40B9B7DD /* EPUBArchive.swift in Sources */,
 				6F97F4165FC509D968B04E7D /* EPUBImporter.swift in Sources */,
 				9E98939E8E44158C27ED1A8C /* FollowApp.swift in Sources */,
 				0E52429C474380D1909CBA80 /* Models.swift in Sources */,
 				01F1A5EFB4234DF7F9FC4275 /* Narrator.swift in Sources */,
 				AFBE5B3544DC73F9417E080B /* PaginatedReader.swift in Sources */,
+				4CB8668E5D2885E514972677 /* PasteBook.swift in Sources */,
 				D00877A34890ECD706388835 /* ReadingTools.swift in Sources */,
+				0EE570D26F1C98538B501EC0 /* VoicePicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,18 +571,36 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				919D76E87C205A0A04B2B9FC /* BookEditor.swift in Sources */,
+				5564AB35CF7E97D696B8BE61 /* EPUBArchive.swift in Sources */,
 				0D2C2C16780FDF39748C4A92 /* EPUBImporter.swift in Sources */,
 				CFFC59325DDAD4BBFB60A463 /* FollowApp.swift in Sources */,
 				B776C207C9477BDC30A05B95 /* Models.swift in Sources */,
 				5AA4B4489BCAA3C71860053A /* Narrator.swift in Sources */,
 				0ED377C2D3AD4CFB2170BF06 /* PaginatedReader.swift in Sources */,
+				3A175D53F906090E6A3CE873 /* PasteBook.swift in Sources */,
 				D1B8E009F8FB5062372C4936 /* ReadingTools.swift in Sources */,
+				6B97E00079C6ED0034382B25 /* VoicePicker.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EDFF602F1920C4C336E784F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				776CD91549FC81547E025BF8 /* EPUBArchive.swift in Sources */,
+				DA2530B54ACA74D10A9270FD /* ShareViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		483162E487EA609BB9847CDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 31218F307AA5555E2E670E84 /* FollowPersonalShare */;
+			targetProxy = FF97E97989A704DE528ED172 /* PBXContainerItemProxy */;
+		};
 		77133183BF13E8D65EFBD49F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = CFE73BE844E639175688F278 /* FollowShare */;
@@ -449,6 +619,25 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		13F8ACB3B6F963DB332809EC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = BXK7DYHCND;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Follow/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.calebhines.Follow.personal;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) PERSONAL_BUILD";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
 		188CB1F454CC6E18CE98E315 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -467,6 +656,23 @@
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
+		};
+		215E7A09C62EAE0227C765D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = BXK7DYHCND;
+				INFOPLIST_FILE = ShareExtension/PersonalInfo.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.calebhines.Follow.personal.share;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) PERSONAL_SHARE";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		3BA2BC962C87C369218D9EEA /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -537,7 +743,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -556,7 +762,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -568,6 +774,25 @@
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
+		};
+		7E63329197A66C188AAC22D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = BXK7DYHCND;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Follow/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.calebhines.Follow.personal;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) PERSONAL_BUILD";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
 		};
 		8A1B87BA9AAB01734630BDF2 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -640,7 +865,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 10;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -653,7 +878,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -715,6 +940,23 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.local.Follow.Share;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E347F9BF056A03F9EF0D50C6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = BXK7DYHCND;
+				INFOPLIST_FILE = ShareExtension/PersonalInfo.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.calebhines.Follow.personal.share;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) PERSONAL_SHARE";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -791,11 +1033,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		74395429DF3652C3E697E611 /* Build configuration list for PBXNativeTarget "FollowPersonalSharing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				13F8ACB3B6F963DB332809EC /* Debug */,
+				7E63329197A66C188AAC22D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		9B2D18DE7BCE439F6CA34E48 /* Build configuration list for PBXNativeTarget "Follow" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F6773683B790DDACBD88F7F0 /* Debug */,
 				52AE6DF518F50DBDDA12035F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B81D2E1180EFB49A58893207 /* Build configuration list for PBXNativeTarget "FollowPersonalShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				215E7A09C62EAE0227C765D3 /* Debug */,
+				E347F9BF056A03F9EF0D50C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -829,6 +1089,16 @@
 			productName = ZIPFoundation;
 		};
 		7ADC971674FF75B5C4041647 /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 850905EF058236B6924E718E /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		9533C44CE8BEC4E55247C10A /* ZIPFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 850905EF058236B6924E718E /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
+			productName = ZIPFoundation;
+		};
+		BA7AC3A02F34322E5EC56E7B /* ZIPFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 850905EF058236B6924E718E /* XCRemoteSwiftPackageReference "ZIPFoundation" */;
 			productName = ZIPFoundation;

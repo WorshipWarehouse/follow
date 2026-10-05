@@ -1,8 +1,66 @@
 import XCTest
+import ZIPFoundation
 @testable import FollowCore
 
 final class CoreTests: XCTestCase {
     func sample() throws -> Book { try EPUBImporter.load(XCTUnwrap(Bundle.module.url(forResource: "Sample", withExtension: "epub"))) }
+    @MainActor func testMetadataEditsPersistWithoutLosingReadingDataOrDuplicatingImport() async throws {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let library = Library(directory: directory)
+        let source = try XCTUnwrap(Bundle.module.url(forResource: "Sample", withExtension: "epub"))
+        let imported = await library.importBook(source)
+        let id = try XCTUnwrap(imported)
+        let original = try XCTUnwrap(library.books.first)
+        let position = Location(chapter: 1, offset: 20)
+        library.update(id, location: position)
+        library.toggleBookmark(book: original, location: position)
+        library.addHighlight(book: original, location: position, range: NSRange(location: 20, length: 8), color: .blue)
+        let cover = Data([1, 2, 3])
+        let edited = try library.editBook(id, title: " Correct Title ", author: "New Author", cover: cover)
+        XCTAssertEqual(edited.location, position)
+        XCTAssertEqual(edited.chapters.map(\.text), original.chapters.map(\.text))
+        let restored = Library(directory: directory)
+        XCTAssertEqual(restored.books.first?.title, "Correct Title")
+        XCTAssertEqual(restored.books.first?.author, "New Author")
+        XCTAssertEqual(restored.books.first?.cover, cover)
+        XCTAssertEqual(restored.books.first?.location, position)
+        XCTAssertEqual(restored.marks(for: id).count, 2)
+        let duplicate = await restored.importBook(source)
+        XCTAssertEqual(duplicate, id)
+        XCTAssertEqual(restored.books.count, 1)
+        _ = try restored.editBook(id, title: "Correct Title", author: "", cover: nil)
+        XCTAssertNil(Library(directory: directory).books.first?.cover)
+        XCTAssertThrowsError(try restored.editBook(id, title: "   ", author: "", cover: nil))
+    }
+    @MainActor func testUnpackedEPUBImportPreservesContentAndArchivedCopy() async throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let source = try XCTUnwrap(Bundle.module.url(forResource: "Sample", withExtension: "epub"))
+        let package = folder.appendingPathComponent("Unpacked.epub")
+        try FileManager.default.createDirectory(at: package, withIntermediateDirectories: true)
+        try FileManager.default.unzipItem(at: source, to: package)
+        let expected = try EPUBImporter.load(source)
+        let library = Library(directory: folder.appendingPathComponent("Library"))
+        let imported = await library.importBook(package)
+        let id = try XCTUnwrap(imported, library.error ?? "Import failed")
+        let actual = try XCTUnwrap(library.books.first)
+        XCTAssertEqual(actual.title, expected.title)
+        XCTAssertEqual(actual.chapters.map(\.text), expected.chapters.map(\.text))
+        let archive = folder.appendingPathComponent("Library").appendingPathComponent(id.uuidString + ".epub")
+        XCTAssertEqual(try EPUBImporter.load(archive).chapters.map(\.text), expected.chapters.map(\.text))
+        XCTAssertTrue(try package.resourceValues(forKeys: [.isDirectoryKey]).isDirectory == true)
+    }
+    func testProvidedAppleBooksPackages() throws {
+        guard let root = ProcessInfo.processInfo.environment["FOLLOW_APPLE_BOOKS_TEST_DIRECTORY"] else { throw XCTSkip("Local user books are not bundled") }
+        let names = ["3198baa3-9d9b-41db-8a7c-b1c65f169bf0.epub", "Becoming a Level 5 Multiplying Church Field Guide.epub", "Church Unique How Missional Leaders Cast Vision Capture Culture and Cr.epub", "Gods Voice Within The Ignatian Way to Discover Gods Will.epub", "If Trading Your if Only Regrets for Gods What if Possibilities.epub", "pdfcoffeecom james-m-kouzes-barry-z-posner-the-leadership-pdf-free.epub", "The Bible Recap Study Guide.epub", "The Bible Recap.epub", "The Circle Maker.epub", "The Purpose-Driven Life What on Earth Am I Here For.epub"]
+        for name in names {
+            let book = try EPUBImporter.load(URL(fileURLWithPath: root).appendingPathComponent(name))
+            XCTAssertFalse(book.chapters.isEmpty, name)
+            print("Imported Apple Books package: \(name); \(book.chapters.count) chapters")
+        }
+    }
     func testEPUBSpineAndFragmentNavigation() throws {
         let book = try sample()
         XCTAssertEqual(book.title, "The Quiet Hour")

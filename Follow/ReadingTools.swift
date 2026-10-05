@@ -57,6 +57,8 @@ struct ReadingMenuView: View {
                     NavigationLink { BookContentsView() } label: { Label("Contents", systemImage: "list.bullet") }
                     NavigationLink { BookSearchView() } label: { Label("Search Book", systemImage: "magnifyingglass") }
                     NavigationLink { AnnotationsView() } label: { Label("Bookmarks & Highlights", systemImage: "bookmark.square") }
+                    NavigationLink { AccessibilityReadingView() } label: { Label("Apple Accessibility Reader", systemImage: "accessibility") }
+                    if let book { NavigationLink { BookEditorView(book: book) } label: { Label("Edit Book", systemImage: "pencil") } }
                     NavigationLink { SettingsView() } label: { Label("Themes & Settings", systemImage: "textformat.size") }
                 }
                 Section {

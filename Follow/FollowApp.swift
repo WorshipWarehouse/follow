@@ -32,6 +32,7 @@ struct LibraryView: View {
     @Environment(\.scenePhase) var phase
     @State private var drainingInbox = false
     @State private var importHelp = false
+    @State private var editingBook: Book?
     @State private var picker = false
     @State private var path: [UUID] = []
     var body: some View {
@@ -60,7 +61,9 @@ struct LibraryView: View {
                                         ProgressView(value: book.progress)
                                         Text("\(Int(book.progress * 100))% read").font(.caption2).foregroundStyle(.secondary)
                                     }.foregroundStyle(.primary)
-                                }.buttonStyle(.plain)
+                                }.buttonStyle(.plain).contextMenu {
+                                    Button("Edit Book", systemImage: "pencil") { editingBook = book }
+                                }
                             }
                         }.padding(24)
                     }
@@ -75,12 +78,13 @@ struct LibraryView: View {
                 }
                 .overlay { if library.importing { ProgressView("Opening your book…").padding(24).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 18)) } }
         }
-        .fileImporter(isPresented: $picker, allowedContentTypes: [UTType(filenameExtension: "epub") ?? .data], allowsMultipleSelection: true) { result in
+        .fileImporter(isPresented: $picker, allowedContentTypes: [.item], allowsMultipleSelection: true) { result in
             switch result {
             case .success(let urls): Task { for url in urls { await importAndOpen(url) } }
             case .failure(let error): library.error = error.localizedDescription
             }
         }
+        .sheet(item: $editingBook) { book in NavigationStack { BookEditorView(book: book) } }
         .sheet(isPresented: $importHelp) {
             NavigationStack {
                 List {
@@ -176,9 +180,11 @@ struct SettingsView: View {
     @EnvironmentObject var library: Library
     @EnvironmentObject var narrator: Narrator
     @Environment(\.dismiss) var dismiss
-    private var voices: [AVSpeechSynthesisVoice] {
-        let language = narrator.book?.language.components(separatedBy: "-").first ?? "en"
-        return AVSpeechSynthesisVoice.speechVoices().filter { $0.language.hasPrefix(language) }.sorted { $0.name < $1.name }
+    private var voiceLabel: String {
+        if library.settings.voice.isEmpty { return "Automatic" }
+        if library.settings.voice == "system" { return "Device preference" }
+        guard let voice = AVSpeechSynthesisVoice(identifier: library.settings.voice) else { return "Unavailable · choose again" }
+        return "\(voice.name) · \(VoiceCatalog.qualityName(voice))"
     }
     var body: some View {
         Form {
@@ -241,16 +247,15 @@ struct SettingsView: View {
                 }
                 Section("Apple voice") {
                     Picker("Speed", selection: $library.settings.speed) { ForEach(ReaderSettings.speeds, id: \.self) { Text("\($0.formatted())×").tag($0) } }
-                    Picker("Voice", selection: $library.settings.voice) {
-                        Text("Automatic · book language").tag("")
-                        ForEach(voices, id: \.identifier) { Text("\($0.name) · \($0.language)").tag($0.identifier) }
+                    NavigationLink { VoicePickerView() } label: {
+                        HStack { Text("Voice"); Spacer(); Text(voiceLabel).foregroundStyle(.secondary).lineLimit(1) }
                     }
-                    Text("Uses voices available on your iPhone. Manage downloaded voices in Settings → Accessibility → Spoken Content. Speed labels are approximate.").font(.footnote).foregroundStyle(.secondary)
+                    Text("Browse all available app voices, including Enhanced and Premium versions, and listen to previews. Siri voices are reserved for Apple’s accessibility reader. Speed labels are approximate.").font(.footnote).foregroundStyle(.secondary)
                 }
         }.navigationTitle("Themes & Settings").navigationBarTitleDisplayMode(.inline)
             .onChange(of: library.settings) { old, new in
             library.save()
-            if old.voice != new.voice || old.speed != new.speed { narrator.settingsChanged() }
+            if old.speed != new.speed { narrator.settingsChanged() }
         }
     }
 }
