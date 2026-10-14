@@ -1,0 +1,37 @@
+{
+  "name": "Follow",
+  "identifier": "com.worshipwarehouse.follow.source",
+  "sourceURL": "https://raw.githubusercontent.com/WorshipWarehouse/follow/main/output/sidestore-source.json",
+  "subtitle": "Read and listen to your EPUB books",
+  "website": "https://github.com/WorshipWarehouse/follow",
+  "apps": [
+    {
+      "name": "Follow",
+      "bundleIdentifier": "com.calebhines.Follow.personal",
+      "developerName": "WorshipWarehouse",
+      "localizedDescription": "An offline iPhone EPUB reader with native read-aloud, synchronized highlighting, bookmarks, themes, and editable book details. Free Apple signing needs refreshing before its seven-day expiry.",
+      "iconURL": "https://raw.githubusercontent.com/WorshipWarehouse/follow/main/Follow/Assets.xcassets/AppIcon.appiconset/AppIcon.png",
+      "screenshots": [],
+      "versions": [
+        {
+          "version": "1.5",
+          "buildVersion": "11",
+          "date": "2026-10-13",
+          "downloadURL": "https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build11/Follow-unsigned.ipa",
+          "size": 1358890,
+          "minOSVersion": "17.0",
+          "localizedDescription": "Recent-first library ordering, finished-book sorting, editable book details, and Apple Books EPUB folder support."
+        }
+      ],
+      "version": "1.5",
+      "versionDate": "2026-10-13",
+      "downloadURL": "https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build11/Follow-unsigned.ipa",
+      "size": 1358890,
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    }
+  ],
+  "news": []
+}

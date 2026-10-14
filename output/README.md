@@ -22,3 +22,15 @@ For general users to install without a Mac or signing tools, the developer must 
 With Xcode and Python 3 installed, run `./scripts/build-download.sh` from the repository. It produces this IPA and checksum without signing or provisioning profiles. Temporary build files are created outside the repository.
 
 Apple references: [Personal Team expiration](https://developer.apple.com/help/account/basics/about-your-developer-account), [distribution options](https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases), and [TestFlight](https://developer.apple.com/help/app-store-connect/test-a-beta-version/testflight-overview/).
+
+## SideStore
+
+[Download the Release IPA](https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build11/Follow-unsigned.ipa) and import it in SideStore → My Apps → +. You can also add this source URL in SideStore’s Sources screen:
+
+```text
+https://raw.githubusercontent.com/WorshipWarehouse/follow/main/output/sidestore-source.json
+```
+
+[Add Follow’s source to SideStore](sidestore://source?url=https%3A%2F%2Fraw.githubusercontent.com%2FWorshipWarehouse%2Ffollow%2Fmain%2Foutput%2Fsidestore-source.json) (requires SideStore already installed).
+
+Set up SideStore using its [official prerequisites](https://docs.sidestore.io/docs/installation/prerequisites) and [installation guide](https://docs.sidestore.io/docs/installation/install). Connect LocalDevVPN and use Wi-Fi when installing or refreshing. Refresh both SideStore and Follow before their seven-day counters expire; automatic background refresh is not guaranteed. Keep the existing Follow app until verifying your library in the SideStore installation—signing tools may change identifiers and create a separate copy.
