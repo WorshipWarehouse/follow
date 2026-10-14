@@ -52,17 +52,18 @@ struct LibraryView: View {
                 } else {
                     ScrollView {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 28) {
-                            ForEach(library.books) { book in
+                            ForEach(library.sortedBooks) { book in
                                 Button { narrator.open(book, library: library); path.append(book.id) } label: {
                                     VStack(alignment: .leading, spacing: 8) {
                                         CoverView(book: book).frame(height: 215).frame(maxWidth: .infinity)
                                         Text(book.title).font(.headline).lineLimit(2)
                                         Text(book.author).font(.caption).foregroundStyle(.secondary).lineLimit(1)
                                         ProgressView(value: book.progress)
-                                        Text("\(Int(book.progress * 100))% read").font(.caption2).foregroundStyle(.secondary)
+                                        Text(book.isFinished ? "Finished" : "\(Int(book.progress * 100))% read").font(.caption2).foregroundStyle(.secondary)
                                     }.foregroundStyle(.primary)
                                 }.buttonStyle(.plain).contextMenu {
                                     Button("Edit Book", systemImage: "pencil") { editingBook = book }
+                                    Button(book.isFinished ? "Mark as Unfinished" : "Mark as Finished", systemImage: book.isFinished ? "book" : "checkmark.circle") { library.markFinished(book.id, finished: !book.isFinished) }
                                 }
                             }
                         }.padding(24)

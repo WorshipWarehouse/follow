@@ -44,6 +44,7 @@ import MediaPlayer
         remoteTargets.append((command, target))
     }
     func open(_ book: Book, library: Library) {
+        library.markOpened(book.id)
         if self.book?.id == book.id { return }
         pause()
         invalidate()

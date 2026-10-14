@@ -61,6 +61,28 @@ final class CoreTests: XCTestCase {
             print("Imported Apple Books package: \(name); \(book.chapters.count) chapters")
         }
     }
+    @MainActor func testLibraryOrdersRecentBooksBeforeFinishedAndPersists() throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        var first = try sample()
+        var second = first; second.id = UUID()
+        var third = first; third.id = UUID()
+        first.lastOpened = Date(timeIntervalSince1970: 10)
+        second.lastOpened = Date(timeIntervalSince1970: 20)
+        third.lastOpened = Date(timeIntervalSince1970: 30); third.finished = true
+        let library = Library(directory: folder)
+        library.books = [first, second, third]
+        XCTAssertEqual(library.sortedBooks.map(\.id), [second.id, first.id, third.id])
+        library.markOpened(first.id, at: Date(timeIntervalSince1970: 40))
+        XCTAssertEqual(library.sortedBooks.map(\.id), [first.id, second.id, third.id])
+        library.markFinished(first.id, finished: true)
+        let restored = Library(directory: folder)
+        XCTAssertEqual(restored.sortedBooks.map(\.id), [second.id, first.id, third.id])
+        restored.markFinished(third.id, finished: false)
+        XCTAssertEqual(restored.sortedBooks.map(\.id), [third.id, second.id, first.id])
+        restored.update(second.id, location: Location(chapter: second.chapters.count - 1, offset: second.chapters.last!.length))
+        XCTAssertTrue(Library(directory: folder).books.first(where: { $0.id == second.id })!.isFinished)
+    }
     func testEPUBSpineAndFragmentNavigation() throws {
         let book = try sample()
         XCTAssertEqual(book.title, "The Quiet Hour")

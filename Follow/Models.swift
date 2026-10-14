@@ -78,6 +78,9 @@ struct Book: Codable, Identifiable {
     var originalTitle: String? = nil
     var originalAuthor: String? = nil
     var customCover: Bool? = nil
+    var lastOpened: Date? = nil
+    var finished: Bool? = nil
+    var isFinished: Bool { finished ?? (progress >= 1) }
     var progress: Double {
         let total = chapters.reduce(0) { $0 + $1.length }
         guard total > 0 else { return 0 }
@@ -244,6 +247,8 @@ enum BookSearch {
                     if let title = old.originalTitle { fresh.originalTitle = title; fresh.title = old.title }
                     if let author = old.originalAuthor { fresh.originalAuthor = author; fresh.author = old.author }
                     if old.customCover == true { fresh.cover = old.cover; fresh.customCover = true }
+                    fresh.lastOpened = old.lastOpened
+                    fresh.finished = old.finished
                     fresh.location = PositionMigration.restore(old: old, new: fresh)
                     books[i] = fresh
                     upgraded = true
@@ -262,6 +267,25 @@ enum BookSearch {
             try JSONEncoder().encode(books).write(to: directory.appendingPathComponent("library.json"), options: .atomic)
             UserDefaults.standard.set(try JSONEncoder().encode(settings), forKey: "readerSettings")
         } catch { self.error = "Your reading position could not be saved: \(error.localizedDescription)" }
+    }
+    var sortedBooks: [Book] {
+        books.enumerated().sorted { left, right in
+            if left.element.isFinished != right.element.isFinished { return !left.element.isFinished }
+            let leftDate = left.element.lastOpened ?? .distantPast
+            let rightDate = right.element.lastOpened ?? .distantPast
+            if leftDate != rightDate { return leftDate > rightDate }
+            return left.offset > right.offset
+        }.map(\.element)
+    }
+    func markOpened(_ id: UUID, at date: Date = Date()) {
+        guard let index = books.firstIndex(where: { $0.id == id }) else { return }
+        books[index].lastOpened = date
+        save()
+    }
+    func markFinished(_ id: UUID, finished: Bool) {
+        guard let index = books.firstIndex(where: { $0.id == id }) else { return }
+        books[index].finished = finished
+        save()
     }
     func editBook(_ id: UUID, title: String, author: String, cover: Data?) throws -> Book {
         let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -282,6 +306,7 @@ enum BookSearch {
     func update(_ id: UUID, location: Location) {
         guard let i = books.firstIndex(where: { $0.id == id }) else { return }
         books[i].location = location
+        if books[i].progress >= 1, books[i].finished != true { books[i].finished = true; save() }
         do {
             let positions = Dictionary(uniqueKeysWithValues: books.map { ($0.id.uuidString, $0.location) })
             try JSONEncoder().encode(positions).write(to: directory.appendingPathComponent("positions.json"), options: .atomic)

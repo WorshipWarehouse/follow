@@ -2,6 +2,12 @@
 
 A native SwiftUI iPhone EPUB reader with Apple's local read-aloud voices. iOS 17 or later. No account, server, analytics, cloud TTS, or book uploads.
 
+## Download
+
+[Download the unsigned iPhone IPA](https://github.com/WorshipWarehouse/follow/raw/refs/heads/main/output/Follow-unsigned.ipa) · [Installation and signing instructions](output/README.md)
+
+The `output` folder contains a Release build with the Share extension and a SHA-256 checksum. It must be signed for the recipient’s iPhone before installation; it cannot be installed by tapping the GitHub download in Safari. Free Personal Team signing expires after seven days. TestFlight/App Store distribution requires Apple Developer Program membership.
+
 ## Personal iPhone testing
 
 Select the **Follow iPhone** scheme. Its `FollowPersonal` target is configured for the Personal Team selected in Xcode and uses bundle ID `com.calebhines.Follow.personal`. Connect and unlock your iPhone, trust the Mac if prompted, and choose the phone as the run destination. This scheme supports Files import, reading, narration, and background audio without App Groups or a Share Sheet extension. It includes **Try a sample book** on first launch. The original **Follow** scheme retains the complete Share Sheet extension configuration.
@@ -126,3 +132,11 @@ The optional Follow iPhone Sharing scheme includes a personal-team Share extensi
 ## Sharing build (1.5 build 10)
 
 Removed Paste from the library and empty state. The Follow iPhone Sharing scheme now signs successfully and embeds FollowPersonalShare. Its Save Book for Follow action exports the normalized EPUB through the system Files picker. Save in On My iPhone → Follow and open Follow for inbox import, or save elsewhere and use +. The sharing app uses the same bundle identifier and preserves existing library data. The signed app and embedded extension passed codesign verification. Share-sheet visibility and the Files export interaction still need a manual check on the phone.
+
+## Library ordering (1.5 build 11)
+
+The library sorts unfinished books by most recently opened first, then finished books at the bottom. Older books without an opening timestamp use newest import order. Long-press a book to mark it finished or unfinished without moving its reading position. Narration reaching the end marks it finished automatically. Dates and completion status persist with library metadata and survive parser upgrades.
+
+## Signing refresh
+
+The existing Personal Team profile expired after seven days, causing the app to become unavailable. Rebuild and reinstall with the same bundle identifier to refresh signing without deleting the app or its library. The free account cannot provide a permanently signed GitHub download. `scripts/build-download.sh` generates an unsigned, credential-free Release IPA for users to sign themselves.

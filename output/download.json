@@ -1,0 +1,9 @@
+{
+  "file": "Follow-unsigned.ipa",
+  "version": "1.5",
+  "build": "11",
+  "minimumIOS": "17.0",
+  "signing": "unsigned; sign for your device before installing",
+  "sha256": "affffb23b39c34e6ba9971e2acf9fb73805f6ff5bd59f8dbe713133062195fa2",
+  "bytes": 1358890
+}
