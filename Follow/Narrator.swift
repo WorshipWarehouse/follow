@@ -56,6 +56,14 @@ import MediaPlayer
         highlight = nil; wordHighlight = nil
         nowPlaying()
     }
+    func closeDeletedBook(_ id: UUID) {
+        guard book?.id == id else { return }
+        invalidate()
+        book = nil
+        artwork = nil
+        highlight = nil; wordHighlight = nil
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+    }
     func refreshMetadata(_ updated: Book) {
         guard book?.id == updated.id else { return }
         book = updated

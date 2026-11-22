@@ -15,6 +15,7 @@ struct BookEditorView: View {
     @State private var choosingFile = false
     @State private var loading = false
     @State private var error: String?
+    @State private var confirmingDelete = false
     init(book: Book) {
         bookID = book.id
         _title = State(initialValue: book.title)
@@ -42,6 +43,9 @@ struct BookEditorView: View {
                 TextField("Title", text: $title, axis: .vertical)
                 TextField("Author", text: $author)
             }
+            Section {
+                Button("Delete Book", systemImage: "trash", role: .destructive) { confirmingDelete = true }
+            }
             Section { Text("Changes are saved in Follow. Your reading position, bookmarks, and highlights stay with the book.").font(.footnote).foregroundStyle(.secondary) }
         }
         .navigationTitle("Edit Book").navigationBarTitleDisplayMode(.inline)
@@ -56,6 +60,18 @@ struct BookEditorView: View {
                     } catch { self.error = error.localizedDescription }
                 }.disabled(loading || title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
+        }
+        .confirmationDialog("Delete this book?", isPresented: $confirmingDelete, titleVisibility: .visible) {
+            Button("Delete Book", role: .destructive) {
+                do {
+                    try library.deleteBook(bookID)
+                    narrator.closeDeletedBook(bookID)
+                    dismiss()
+                } catch { self.error = error.localizedDescription }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This removes the book, reading position, bookmarks, and highlights from Follow. Your original file in Files or Apple Books is kept.")
         }
         .task(id: photo) {
             guard let photo else { return }
@@ -75,7 +91,7 @@ struct BookEditorView: View {
                 cover = try Self.prepareCover(Data(contentsOf: url))
             } catch { self.error = "This image could not be opened. \(error.localizedDescription)" }
         }
-        .alert("Couldn’t Save Changes", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) { Button("OK") { error = nil } } message: { Text(error ?? "") }
+        .alert("Couldn’t Update Book", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) { Button("OK") { error = nil } } message: { Text(error ?? "") }
     }
     static func prepareCover(_ data: Data) throws -> Data {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil),

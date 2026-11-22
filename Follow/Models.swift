@@ -287,6 +287,21 @@ enum BookSearch {
         books[index].finished = finished
         save()
     }
+    func deleteBook(_ id: UUID) throws {
+        guard books.contains(where: { $0.id == id }) else { return }
+        let remaining = books.filter { $0.id != id }
+        // Commit the library first: a failed write leaves the book available.
+        try JSONEncoder().encode(remaining).write(to: directory.appendingPathComponent("library.json"), options: .atomic)
+        books = remaining
+        annotations.removeAll { $0.bookID == id }
+        do {
+            try JSONEncoder().encode(annotations).write(to: directory.appendingPathComponent("annotations.json"), options: .atomic)
+            let positions = Dictionary(uniqueKeysWithValues: books.map { ($0.id.uuidString, $0.location) })
+            try JSONEncoder().encode(positions).write(to: directory.appendingPathComponent("positions.json"), options: .atomic)
+            let archive = directory.appendingPathComponent(id.uuidString + ".epub")
+            if FileManager.default.fileExists(atPath: archive.path) { try FileManager.default.removeItem(at: archive) }
+        } catch { self.error = "The book was removed, but some local files could not be cleaned up: \(error.localizedDescription)" }
+    }
     func editBook(_ id: UUID, title: String, author: String, cover: Data?) throws -> Book {
         let title = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !title.isEmpty, let index = books.firstIndex(where: { $0.id == id }) else {

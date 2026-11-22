@@ -100,6 +100,9 @@ struct LibraryView: View {
                 }.navigationTitle("Importing books").toolbar { Button("Done") { importHelp = false } }
             }
         }
+        .onChange(of: library.books.map(\.id)) { _, ids in
+            if path.contains(where: { !ids.contains($0) }) { path = [] }
+        }
         .onOpenURL { url in Task { await importAndOpen(url) } }
         .task { await drainInbox() }
         .onChange(of: phase) { _, phase in if phase == .active { Task { await drainInbox() } } }

@@ -83,6 +83,29 @@ final class CoreTests: XCTestCase {
         restored.update(second.id, location: Location(chapter: second.chapters.count - 1, offset: second.chapters.last!.length))
         XCTAssertTrue(Library(directory: folder).books.first(where: { $0.id == second.id })!.isFinished)
     }
+    @MainActor func testDeletingBookPersistsAndPreservesOtherBooksAndSource() async throws {
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let source = try XCTUnwrap(Bundle.module.url(forResource: "Sample", withExtension: "epub"))
+        let library = Library(directory: folder)
+        let imported = await library.importBook(source)
+        let id = try XCTUnwrap(imported)
+        var other = try sample(); other.id = UUID()
+        library.books.append(other); library.save()
+        library.toggleBookmark(book: library.books[0], location: Location())
+        library.toggleBookmark(book: other, location: Location())
+        library.update(id, location: Location(chapter: 1, offset: 10))
+        try library.deleteBook(id)
+        let restored = Library(directory: folder)
+        XCTAssertEqual(restored.books.map(\.id), [other.id])
+        XCTAssertTrue(restored.marks(for: id).isEmpty)
+        XCTAssertEqual(restored.marks(for: other.id).count, 1)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: folder.appendingPathComponent(id.uuidString + ".epub").path))
+        XCTAssertTrue(FileManager.default.fileExists(atPath: source.path))
+        let reimported = await restored.importBook(source)
+        XCTAssertNotNil(reimported)
+        XCTAssertEqual(restored.books.last?.location, Location())
+    }
     func testEPUBSpineAndFragmentNavigation() throws {
         let book = try sample()
         XCTAssertEqual(book.title, "The Quiet Hour")
