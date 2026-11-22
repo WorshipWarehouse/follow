@@ -15,6 +15,15 @@
       "versions": [
         {
           "version": "1.5",
+          "buildVersion": "12",
+          "date": "2026-11-22",
+          "downloadURL": "https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build12/Follow-unsigned.ipa",
+          "size": 1366804,
+          "minOSVersion": "17.0",
+          "localizedDescription": "Delete books from Edit Book with confirmation. Removes local reading data and stops narration for the deleted book; keeps original EPUB files."
+        },
+        {
+          "version": "1.5",
           "buildVersion": "11",
           "date": "2026-10-13",
           "downloadURL": "https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build11/Follow-unsigned.ipa",
@@ -24,9 +33,9 @@
         }
       ],
       "version": "1.5",
-      "versionDate": "2026-10-13",
-      "downloadURL": "https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build11/Follow-unsigned.ipa",
-      "size": 1358890,
+      "versionDate": "2026-11-22",
+      "downloadURL": "https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build12/Follow-unsigned.ipa",
+      "size": 1366804,
       "appPermissions": {
         "entitlements": [],
         "privacy": {}

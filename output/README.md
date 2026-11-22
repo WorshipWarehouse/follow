@@ -25,7 +25,7 @@ Apple references: [Personal Team expiration](https://developer.apple.com/help/ac
 
 ## SideStore
 
-[Download the Release IPA](https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build11/Follow-unsigned.ipa) and import it in SideStore → My Apps → +. You can also add this source URL in SideStore’s Sources screen:
+[Download the Release IPA](https://github.com/WorshipWarehouse/follow/releases/download/v1.5-build12/Follow-unsigned.ipa) and import it in SideStore → My Apps → +. You can also add this source URL in SideStore’s Sources screen:
 
 ```text
 https://raw.githubusercontent.com/WorshipWarehouse/follow/main/output/sidestore-source.json
