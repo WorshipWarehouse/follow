@@ -140,3 +140,7 @@ The library sorts unfinished books by most recently opened first, then finished 
 ## Signing refresh
 
 The existing Personal Team profile expired after seven days, causing the app to become unavailable. Rebuild and reinstall with the same bundle identifier to refresh signing without deleting the app or its library. The free account cannot provide a permanently signed GitHub download. `scripts/build-download.sh` generates an unsigned, credential-free Release IPA for users to sign themselves.
+
+## Delete books (1.5 build 12)
+
+Edit Book includes a destructive Delete Book action with confirmation. It removes Follow’s library entry, retained EPUB, saved position, bookmarks, and highlights, while leaving the source file in Files or Apple Books untouched. Deleting the open book stops narration and returns to the library. Core deletion/persistence and reimport regression tests pass.
